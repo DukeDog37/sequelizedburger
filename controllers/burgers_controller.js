@@ -2,12 +2,13 @@ var express = require("express");
 var moment = require("moment");
 var router = express.Router();
 
+var db = require("../models");
 // Import burger.js model
-var burger = require("../models/burger.js");
+var burgers = require("../models/burger.js");
 
 // Create get, post, put and delete routes
 router.get("/", function(req, res) {
-  burger.all(function(data) {
+  burgers.all(function(data) {
     var hbsObject = {
       burgers: data
     };
@@ -17,7 +18,7 @@ router.get("/", function(req, res) {
 });
 
 router.post("/", function(req, res) {
-    burger.create([
+    burgers.create([
     "burger_name", "devoured", "date"
   ], [
     req.body.burger, 0, moment().format("YYYY-MM-DD HH:mm:ss")
@@ -28,7 +29,7 @@ router.post("/", function(req, res) {
 
 router.put("/:id", function(req, res) {
   var condition = "id = " + req.params.id;
-  burger.update({
+  burgers.update({
     devoured: 1
   }, condition, function() {
     res.redirect("/");
@@ -37,7 +38,7 @@ router.put("/:id", function(req, res) {
 
 router.delete('/:id', function(req, res){
   var condition = 'id = ' + req.params.id;
-    burger.delete(condition, function(){
+    burgers.delete(condition, function(){
       res.redirect('/');
     });
 });
